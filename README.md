@@ -24,7 +24,7 @@ Cloud Services:
 - NodeRED, to process msgs
 
 Dependencies:
-- Paho MQTT client for Python
+- Paho MQTT client for Python (see: https://www.eclipse.org/paho/clients/python/)
 - configparser
 
 Release 1.0:
