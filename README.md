@@ -35,5 +35,5 @@ Release 3.0:
 I will integrate the Python code with Eclipse Kura.
 
 Release history:
--27/12/2017: vers. 0.5
+- 27/12/2017: vers. 0.5
 
