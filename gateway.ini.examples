@@ -1,13 +1,18 @@
 [DEFAULT]
-host =  <your hostname>
-port = 1883
+host =  <your mqtt broker hostname>
+port = 8883
+
+# use TLS YES|NO
+TLS = YES
+CAFILEPATH = /path-to/ca.crt
+
 timeout = 60
-client = c1
+client = cs1
 myQos = 1
 carID = 0001
 
 # mqttLogging YES|NO
-mqttLogging = NO
+mqttLogging = YES
 # logging messages on file
 msgLogging = YES
 
