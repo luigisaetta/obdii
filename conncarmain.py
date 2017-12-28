@@ -1,7 +1,10 @@
 #
-# Author: L. Saetta
-# 27 december 2017
+# Author:       L. Saetta
+# created:      27 december 2017
+# last update:  27/12/2017
 #
+# published under MIT license (see LICENSE file)
+
 # pylint: disable=invalid-name
 
 import json
@@ -15,20 +18,25 @@ from Device import Device
 STFORMAT1 = "%Y-%m-%d %H:%M:%S"
 STFORMAT2 = "%Y-%m-%d"
 
+# file name for local logging
 FNAME = "msgs" + datetime.datetime.now().strftime(STFORMAT2) + ".log"
 
 # send a msg every 5 sec.
 sleepTime = 5
-#MQTT topic
+#the name of MQTT topic where msgs are sent
 TOPIC_NAME = 'cardata'
 
 
-# read config from ini file
+# read configuration from gateway.ini file
 config = configparser.ConfigParser()
 config.read('gateway.ini')
 msgLogging = config['DEFAULT']['msgLogging']
 carID = config['DEFAULT']['carID']
 
+#
+# createJSONMsg()
+# create the msg in JSON format starting from OBDII readings
+#
 def createJSONMsg():
     # for now simulate
     msg['carid'] = carID
@@ -52,9 +60,17 @@ def createJSONMsg():
 # see Device.py
 gateway = Device()
 
-gateway.connect()
 
-nMsgs = 0
+# try connecting in loop
+# to handle case in which initially no network connection
+while gateway.isConnected() != True:
+    try:
+        gateway.connect()
+    except:
+        print('Error in MQTT connection !')
+
+    time.sleep(sleepTime)
+
 
 #
 # main loop
@@ -67,13 +83,14 @@ if msgLogging == "YES":
 # (at this point should be connected)
 gateway.wait_for_conn_ok()
 
-print('Mqtt connected OK!')
+print('Mqtt connection OK !')
 
+nMsgs = 0
 msg = {}
 
 while True:
     nMsgs = nMsgs + 1
-    print('Sending msg ', nMsgs)
+    print('Sending msg number: ', nMsgs)
 
     # create the msg to send from data
     msgJson = createJSONMsg()
