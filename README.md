@@ -12,16 +12,20 @@ Some details:
 
 HW that will be used
 
-- OBDII port in car
-- OBDII bluetooth adapter (from Amazon)
-- RPI 3
-- A SmartPhone (in my case an iPhone)
-- a PowerBank
+- OBDII port in the car
+- OBDII bluetooth adapter (can buy from Amazon)
+- a Raspberry PI 3 (need bluetooth and WIFI)
+- A SmartPhone, for Internet Connectivity (in my case an iPhone)
+- a PowerBank, to power the RPI
 
 Cloud Services:
 
 - an MQTT broker
 - NodeRED, to process msgs
+
+Dependencies:
+- Paho MQTT client for Python
+- configparser
 
 Release 1.0:
 The first release of the code will read a set of values from OBDII interface, will format it as a JSON msg
