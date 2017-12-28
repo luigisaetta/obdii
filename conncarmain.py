@@ -1,6 +1,6 @@
 #
 # Author: L. Saetta
-# 17 december 2017
+# 27 december 2017
 #
 # pylint: disable=invalid-name
 
@@ -54,7 +54,9 @@ gateway.connect()
 
 nMsgs = 0
 
+#
 # main loop
+#
 
 if msgLogging == "YES":
     pFile = open(FNAME, "w")
