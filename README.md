@@ -3,6 +3,7 @@
 ## Author: L. Saetta
 
 ## Date:   27/12/2017
+##         luigi.saetta@gmail.com
 
 This repository contains most of the work I have done to develop, in Python,
 a working prototype for my idea of a connected car.
