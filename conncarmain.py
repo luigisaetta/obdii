@@ -15,10 +15,10 @@ from Device import Device
 STFORMAT1 = "%Y-%m-%d %H:%M:%S"
 STFORMAT2 = "%Y-%m-%d"
 
-FNAME = "msgs" + datetime.datetime.now().strftime(STFORMAT2) + ".txt"
+FNAME = "msgs" + datetime.datetime.now().strftime(STFORMAT2) + ".log"
 
-# send a msg every 10 sec.
-sleepTime = 10
+# send a msg every 5 sec.
+sleepTime = 5
 #MQTT topic
 TOPIC_NAME = 'cardata'
 
@@ -27,10 +27,11 @@ TOPIC_NAME = 'cardata'
 config = configparser.ConfigParser()
 config.read('gateway.ini')
 msgLogging = config['DEFAULT']['msgLogging']
+carID = config['DEFAULT']['carID']
 
-def setFields():
+def createJSONMsg():
     # for now simulate
-    msg['carid'] = '0001'
+    msg['carid'] = carID
     msg['dtime'] = datetime.datetime.now().strftime(STFORMAT1)
     msg['rpm'] = 1200
     msg['speed'] = 35
@@ -42,8 +43,9 @@ def setFields():
     
     return msgJson
 
+
 #
-# Main 
+# **** Main **** 
 #
 
 # MQTT connectivity is encapsulated in the Device class
@@ -74,10 +76,13 @@ while True:
     print('Sending msg ', nMsgs)
 
     # create the msg to send from data
-    msgJson = setFields()
+    msgJson = createJSONMsg()
 
-    gateway.publish(TOPIC_NAME, msgJson)
-    
+    try:
+        gateway.publish(TOPIC_NAME, msgJson)
+    except:
+        print('Error in sending...')
+
     if msgLogging == "YES":
         # log msg on file...
         pFile.write(msgJson)
