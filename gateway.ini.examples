@@ -1,0 +1,12 @@
+[DEFAULT]
+host =  <your hostname>
+port = 1883
+timeout = 60
+client = c1
+myQos = 1
+# mqttLogging YES|NO
+mqttLogging = NO
+# logging messages on file
+msgLogging = YES
+
+
