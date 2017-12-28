@@ -26,6 +26,8 @@ TIMEOUT = int(config['DEFAULT']['timeout'])
 CLIENT = config['DEFAULT']['client']
 MYQOS = int(config['DEFAULT']['myQos'])
 mqttLogging = config['DEFAULT']['mqttLogging']
+TLS = config['DEFAULT']['TLS']
+CAFILEPATH = config['DEFAULT']['CAFILEPATH']
 
 class Device(object):
     """ This class encapsulate Device communication with MQTT broker """
@@ -41,6 +43,8 @@ class Device(object):
         # MQTT callbacks registration
         self.mqttClient.on_message = self.on_message
         self.mqttClient.on_connect = self.on_connect
+        self.mqttClient.on_disconnect = self.on_disconnect
+
         self.mqttClient.on_publish = self.on_publish
 
         if mqttLogging == "YES":
@@ -56,6 +60,13 @@ class Device(object):
         print("")
         print("MQTT Connection:...: ", self.connOK)
         print("")
+
+    def on_disconnect(self, client, userdata, rc):
+        self.connOK = False
+        print("MQTT disconnected...")
+
+    def isConnected(self):
+        return self.connOK
 
     def on_message(self, mqttc, obj, msg):
         print(msg.topic + " " + str(msg.payload))
@@ -73,6 +84,9 @@ class Device(object):
     # Public Methods
     #
     def connect(self):
+        if TLS == "YES":
+            self.mqttClient.tls_set(ca_certs=CAFILEPATH)
+        
         self.mqttClient.connect(HOST, PORT, TIMEOUT)
 
         # start a background thread to process networks events. It should also
