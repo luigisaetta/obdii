@@ -28,7 +28,7 @@ Dependencies:
 - configparser
 
 Release 1.0:
-The first release of the code will read a set of values from OBDII interface, will format it as a JSON msg
+The first release of the code will read in a loop a set of values from OBDII interface, format it as a JSON msg
 and will send it to the MQTT broker to a dedicated topic.
 In a separate project I will create a flow using NodeRED to show the data from the car in a Dashboard.
 
