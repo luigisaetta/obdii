@@ -13,7 +13,7 @@ Some details:
 HW that will be used
 
 - OBDII port in the car
-- OBDII bluetooth adapter (can buy from Amazon)
+- OBDII bluetooth adapter (available from Amazo, for example)
 - a Raspberry PI 3 (need bluetooth and WIFI)
 - A SmartPhone, for Internet Connectivity (in my case an iPhone)
 - a PowerBank, to power the RPI
@@ -30,7 +30,7 @@ Dependencies:
 Release 1.0:
 The first release of the code will read in a loop a set of values from OBDII interface, format it as a JSON msg
 and will send it to the MQTT broker to a dedicated topic.
-In a separate project I will create a flow using NodeRED to show the data from the car in a Dashboard.
+In a separate project I will create a NodeRED flow to show the data from the car in a Dashboard.
 
 Release 2.0:
 In release 2.0 I will integrate Oracle IoT Cloud Service
