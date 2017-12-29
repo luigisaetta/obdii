@@ -40,7 +40,8 @@ carID = config['DEFAULT']['carID']
 # create the msg in JSON format starting from OBDII readings
 #
 def createJSONMsg():
-    # for now simulate
+    msg = {}
+    
     if (runMode == "SIMUL"):
         msg['carid'] = carID
         msg['dtime'] = datetime.datetime.now().strftime(STFORMAT1)
@@ -51,7 +52,7 @@ def createJSONMsg():
         msg['toutdoor'] = 12
     else:
        # read data from OBDII
-       pass 
+       msg = obdii.getMessage()
     
     msgJson = json.dumps(msg)
     
@@ -112,7 +113,6 @@ gateway.wait_for_conn_ok()
 print('Mqtt connection OK !\n')
 
 nMsgs = 0
-msg = {}
 
 while True:
     nMsgs = nMsgs + 1

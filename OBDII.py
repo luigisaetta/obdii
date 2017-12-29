@@ -24,8 +24,7 @@ class OBDII(object):
 
     def getMessage(self):
         msg = {}
+        msg['origin'] = 'obdii'
         msg['value'] = 'test'
 
-        msgJson = json.dumps(msg)
-
-        return msgJson
+        return msg
