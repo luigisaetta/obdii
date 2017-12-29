@@ -1,0 +1,110 @@
+This file contains the documentation with all the steps needed to activate TLS communication 
+with MQTT broker
+
+Important note: in creation of server.key I have eliminated the -des3 to avoid a passphrase
+
+Steps:
+
+First of all, I have created, using openssl, my own CA.
+Therefore I have created key and cert for CA and key and cert for the broker, signed with CA key.
+
+1. CA 
+Generate keys and certificate for the Certification Authority
+You're going to generate a self-signed certificate, contained in ca.crt file
+
+openssl req -new -x509 -days 730 -extensions v3_ca -keyout ca.key -out ca.crt
+
+
+enerating a 2048 bit RSA private key
+.+++
+........................+++
+writing new private key to 'ca.key'
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:IT
+State or Province Name (full name) [Some-State]:IT
+Locality Name (eg, city) []:Rome
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Saetta
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:CA
+Email Address []:
+
+ubuntu@iotfrontend:~/tls$ ls -lrt
+total 8
+-rw-rw-r-- 1 ubuntu ubuntu 1834 Dec 28 15:41 ca.key
+-rw-rw-r-- 1 ubuntu ubuntu 1233 Dec 28 15:41 ca.crt
+
+The CA passphrase set is ....
+
+2. generate key, pair for the broker
+
+2.1 
+openssl genrsa -out server.key 2048
+
+Generating RSA private key, 2048 bit long modulus
+...........+++
+...................+++
+e is 65537 (0x10001)
+
+(eliminando -des3 non chiede la passkey per la server.key)
+
+2.2 generate CSR
+openssl req -out server.csr -key server.key -new
+
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:IT
+State or Province Name (full name) [Some-State]:IT
+Locality Name (eg, city) []:Rome
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Saetta
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []: <my mqtt broker FQDN>
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+
+ls -lrt
+total 16
+-rw-rw-r-- 1 ubuntu ubuntu 1834 Dec 28 15:41 ca.key
+-rw-rw-r-- 1 ubuntu ubuntu 1233 Dec 28 15:41 ca.crt
+-rw-rw-r-- 1 ubuntu ubuntu 1743 Dec 28 15:45 server.key
+-rw-rw-r-- 1 ubuntu ubuntu 1033 Dec 28 15:47 server.csr
+
+3. Sign the certificate assigned to the broker using CA keys
+openssl x509 -req -in server.csr -CA ./ca.crt -CAkey ./ca.key -CAcreateserial -out server.crt -days 730
+Signature ok
+subject=/C=IT/ST=IT/L=Rome/O=Saetta/CN=<my mqtt broker FQDN>
+Getting CA Private Key
+Enter pass phrase for ./ca.key:
+
+The certificate is now in server.crt
+
+4. Configuration to add to mosquitto broker mosquitto.conf
+
+listener 8883
+cafile /mosquitto/config/certs/ca.crt
+certfile /mosquitto/config/certs/server.crt
+keyfile /mosquitto/config/certss/server.key
+
+5. Config file placement on containers environment
+
+I have placed in /home/ubuntu/containers/mosquitto/certs
+
+-rw-rw-r-- 1 ubuntu ubuntu 1233 Dec 28 15:55 ca.crt
+-rw-rw-r-- 1 ubuntu ubuntu 1188 Dec 28 15:55 server.crt
+-rw-rw-r-- 1 ubuntu ubuntu 1743 Dec 28 15:55 server.key
