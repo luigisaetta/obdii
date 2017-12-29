@@ -19,8 +19,8 @@ from OBDII import OBDII
 
 # Configuration
 #  to format datetime
-STFORMAT1 = "%Y-%m-%d %H:%M:%S"
-STFORMAT2 = "%Y-%m-%d"
+STFORMAT1 = "%d-%m-%Y %H:%M:%S"
+STFORMAT2 = "%d-%m-%Y"
 
 # file name for local logging
 FNAME = "msgs" + datetime.datetime.now().strftime(STFORMAT2) + ".log"
@@ -44,9 +44,9 @@ carID = config['DEFAULT']['carID']
 def createJSONMsg():
     msg = {}
     
-    if (runMode == "SIMUL"):
+    if runMode == "SIMUL":
         msg['carid'] = carID
-        msg['dtime'] = datetime.datetime.now().strftime(STFORMAT1)
+        msg['DTIME'] = datetime.datetime.now().strftime(STFORMAT1)
         msg['rpm'] = 1200
         msg['speed'] = 35
         msg['relposacc'] = 10
@@ -55,8 +55,9 @@ def createJSONMsg():
     else:
        # read data from OBDII
        msg = obdii.getMessage()
-       msg['carid'] = carID
+       msg['CARID'] = carID
     
+    # format in JSON
     msgJson = json.dumps(msg)
     
     return msgJson
@@ -100,7 +101,8 @@ while gateway.isConnected() != True:
 #
 # connectivity to OBDII interface
 #
-obdii = OBDII()
+if runMode == "ACQUIRE":
+    obdii = OBDII()
 
 #
 # main loop
