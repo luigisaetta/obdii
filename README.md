@@ -7,7 +7,7 @@
 ##                  luigi.saetta@gmail.com
 
 This repository contains most of the work I have done to develop, in Python,
-a working prototype for my idea of a connected car.
+a working prototype for my idea of a Connected Car.
 
 Following, some details:
 
@@ -46,3 +46,4 @@ I will integrate the Python code with Eclipse Kura.
 Release history:
 - 27/12/2017: vers. 0.5
 
+For more information about OBD-II, see https://en.wikipedia.org/wiki/OBD-II_PIDs
