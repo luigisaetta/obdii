@@ -13,6 +13,7 @@ import datetime
 import sys
 import configparser
 from Device import Device
+from OBDII import OBDII
 
 # Configuration
 #  to format datetime
@@ -93,6 +94,11 @@ while gateway.isConnected() != True:
 
 
 #
+# connectivity to OBDII interface
+#
+obdii = OBDII()
+
+#
 # main loop
 #
 
@@ -103,7 +109,7 @@ if msgLogging == "YES":
 # (at this point should be connected)
 gateway.wait_for_conn_ok()
 
-print('Mqtt connection OK !')
+print('Mqtt connection OK !\n')
 
 nMsgs = 0
 msg = {}
