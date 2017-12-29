@@ -13,7 +13,7 @@ Some details:
 HW that will be used
 
 - OBDII port in the car
-- OBDII bluetooth adapter (available from Amazo, for example)
+- OBDII bluetooth adapter (available from Amazon, for example)
 - a Raspberry PI 3 (need bluetooth and WIFI)
 - A SmartPhone, for Internet Connectivity (in my case an iPhone)
 - a PowerBank, to power the RPI
@@ -28,8 +28,10 @@ Dependencies:
 - configparser
 
 Release 1.0:
-The first release of the code will read in a loop a set of values from OBDII interface, format it as a JSON msg
+The first release of the code will read, in a loop, a set of values from OBDII interface, format it as a JSON msg
 and will send it to the MQTT broker to a dedicated topic.
+Communication will be secure and protected using TLS1.2
+QoS for msgs will be: 1 (guaranteed at least once)
 In a separate project I will create a NodeRED flow to show the data from the car in a Dashboard.
 
 Release 2.0:

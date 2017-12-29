@@ -26,6 +26,7 @@ TIMEOUT = int(config['DEFAULT']['timeout'])
 CLIENT = config['DEFAULT']['client']
 MYQOS = int(config['DEFAULT']['myQos'])
 mqttLogging = config['DEFAULT']['mqttLogging']
+# config to enable TLS
 TLS = config['DEFAULT']['TLS']
 CAFILEPATH = config['DEFAULT']['CAFILEPATH']
 
@@ -85,6 +86,7 @@ class Device(object):
     #
     def connect(self):
         if TLS == "YES":
+            # this is the path to CA crt file (needed)
             self.mqttClient.tls_set(ca_certs=CAFILEPATH)
         
         self.mqttClient.connect(HOST, PORT, TIMEOUT)
