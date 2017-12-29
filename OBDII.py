@@ -36,42 +36,42 @@ class OBDII(object):
         print('Connected to OBDII...\n')
 
     # method definition
-    def getValueENGINELOAD(self):
+    def getENGINELOAD(self):
         cmd = obd.commands.ENGINE_LOAD
 
         return self.getValue(cmd)
     
-    def getValueCOOLANTTEMP(self):
+    def getCOOLANTTEMP(self):
         cmd = obd.commands.COOLANT_TEMP
 
         return self.getValue(cmd)
 
-    def getValueRPM(self):
+    def getRPM(self):
         cmd = obd.commands.RPM
 
         return self.getValue(cmd)
 
-    def getValueSPEED(self):
+    def getSPEED(self):
         cmd = obd.commands.SPEED
 
         return self.getValue(cmd)
     
-    def getValueRUNTIME(self):
+    def getRUNTIME(self):
         cmd = obd.commands.RUN_TIME
 
         return self.getValue(cmd)
     
-    def getValueFUELLEVEL(self):
+    def getFUELLEVEL(self):
         cmd = obd.commands.FUEL_LEVEL
 
         return self.getValue(cmd)
 
-    def getValueAMBIANTAIRTEMP(self):
+    def getAMBIANTAIRTEMP(self):
         cmd = obd.commands.AMBIANT_AIR_TEMP
 
         return self.getValue(cmd)
     
-    def getValueOILTEMP(self):
+    def getOILTEMP(self):
         cmd = obd.commands.OIL_TEMP
 
         return self.getValue(cmd)
@@ -84,13 +84,13 @@ class OBDII(object):
     def getMessage(self):
         msg = {}
         msg['DTIME'] = datetime.datetime.now().strftime(STFORMAT1)
-        msg['ENGINE_LOAD'] = self.getValueENGINELOAD()
-        msg['COOLANT_TEMP'] = self.getValueCOOLANTTEMP()
-        msg['RPM'] = self.getValueRPM()
-        msg['SPEED'] = self.getValueSPEED()
-        msg['RUN_TIME'] = self.getValueRUNTIME()
-        msg['FUEL_LEVEL'] = self.getValueFUELLEVEL()
-        msg['AMBIANT_AIR_TEMP'] = self.getValueAMBIANTAIRTEMP()
-        msg['OIL_TEMP'] = self.getValueOILTEMP()
+        msg['ENGINE_LOAD'] = self.getENGINELOAD()
+        msg['COOLANT_TEMP'] = self.getCOOLANTTEMP()
+        msg['RPM'] = self.getRPM()
+        msg['SPEED'] = self.getSPEED()
+        msg['RUN_TIME'] = self.getRUNTIME()
+        msg['FUEL_LEVEL'] = self.getFUELLEVEL()
+        msg['AMBIANT_AIR_TEMP'] = self.getAMBIANTAIRTEMP()
+        msg['OIL_TEMP'] = self.getOILTEMP()
 
         return msg
