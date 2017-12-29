@@ -10,6 +10,7 @@
 import json
 import time
 import datetime
+import sys
 import configparser
 from Device import Device
 
@@ -39,13 +40,17 @@ carID = config['DEFAULT']['carID']
 #
 def createJSONMsg():
     # for now simulate
-    msg['carid'] = carID
-    msg['dtime'] = datetime.datetime.now().strftime(STFORMAT1)
-    msg['rpm'] = 1200
-    msg['speed'] = 35
-    msg['relposacc'] = 10
-    msg['tcoolant'] = 33
-    msg['toutdoor'] = 12
+    if (runMode == "SIMUL"):
+        msg['carid'] = carID
+        msg['dtime'] = datetime.datetime.now().strftime(STFORMAT1)
+        msg['rpm'] = 1200
+        msg['speed'] = 35
+        msg['relposacc'] = 10
+        msg['tcoolant'] = 33
+        msg['toutdoor'] = 12
+    else:
+       # read data from OBDII
+       pass 
     
     msgJson = json.dumps(msg)
     
@@ -55,6 +60,21 @@ def createJSONMsg():
 #
 # **** Main **** 
 #
+
+#
+# Test if simulation mode (no acquiring data from OBDII)
+#
+# runMode = SIMUL|ACQUIRE|NULL (null means ACQUIRE)
+parLenght = len(sys.argv)
+
+if parLenght >= 2:
+    runMode = sys.argv[1]
+else:
+    runMode = "ACQUIRE"
+
+print("\n")
+print("Program started...")
+print("RUN MODE: ", runMode)
 
 # MQTT connectivity is encapsulated in the Device class
 # see Device.py
