@@ -1,9 +1,11 @@
+"""
 #
 # Author:       L. Saetta
 # created:      27 december 2017
-# last update:  27/12/2017
+# last update:  29/12/2017
 #
 # published under MIT license (see LICENSE file)
+"""
 
 # pylint: disable=invalid-name
 
@@ -53,6 +55,7 @@ def createJSONMsg():
     else:
        # read data from OBDII
        msg = obdii.getMessage()
+       msg['carid'] = carID
     
     msgJson = json.dumps(msg)
     

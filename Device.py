@@ -1,4 +1,11 @@
 """
+#
+# Author:       L. Saetta
+# created:      10 december 2017
+# last update:  29/12/2017
+#
+# published under MIT license (see LICENSE file)
+#
 # This module implement a class representing a Device
 #
 # Class providing methods to interact with MQTT broker
