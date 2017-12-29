@@ -45,13 +45,17 @@ def createJSONMsg():
     msg = {}
     
     if runMode == "SIMUL":
-        msg['carid'] = carID
+        msg = {}
+        msg['CARID'] = carID
         msg['DTIME'] = datetime.datetime.now().strftime(STFORMAT1)
-        msg['rpm'] = 1200
-        msg['speed'] = 35
-        msg['relposacc'] = 10
-        msg['tcoolant'] = 33
-        msg['toutdoor'] = 12
+        msg['ENGINE_LOAD'] = 22
+        msg['COOLANT_TEMP'] = 33.3
+        msg['RPM'] = 855
+        msg['SPEED'] = 55
+        msg['RUN_TIME'] = 300
+        msg['FUEL_LEVEL'] = 30
+        msg['AMBIANT_AIR_TEMP'] = 12
+        msg['OIL_TEMP'] = 155
     else:
        # read data from OBDII
        msg = obdii.getMessage()
