@@ -26,11 +26,19 @@ class OBDIISimulator(object):
 
         print('Connected to OBDII...\n')
 
+    def getENGINELOAD(self):
+        # test reducing to 3 decimals
+        eng_load = 33.3333395
+        eng_load = float("{0:.3f}".format(eng_load))
+
+        return eng_load
+
     # method definition
     def getMessage(self):
         msg = {}
         msg['DTIME'] = datetime.datetime.now().strftime(STFORMAT1)
-        msg['ENGINE_LOAD'] = 30.3
+        
+        msg['ENGINE_LOAD'] = self.getENGINELOAD()
         msg['COOLANT_TEMP'] = 66
         msg['RPM'] = 1000
         msg['SPEED'] = 25
