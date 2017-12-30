@@ -11,7 +11,12 @@
 
 import json
 import datetime
+import configparser
 
+config = configparser.ConfigParser()
+config.read('gateway.ini')
+
+OBDDATA_FORMAT_STRING = config['DEFAULT']['OBDDATA_FORMAT_STRING']
 
 STFORMAT1 = "%d-%m-%Y %H:%M:%S"
 
@@ -29,9 +34,13 @@ class OBDIISimulator(object):
     def getENGINELOAD(self):
         # test reducing to 3 decimals
         eng_load = 33.3333395
-        eng_load = float("{0:.3f}".format(eng_load))
+        eng_load = self.format_float(eng_load)
 
         return eng_load
+    
+    # utility method to format float with a fixed number of decimals
+    def format_float(self, value):
+        return float(OBDDATA_FORMAT_STRING.format(value))
 
     # method definition
     def getMessage(self):

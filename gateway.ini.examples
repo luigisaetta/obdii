@@ -16,4 +16,6 @@ mqttLogging = YES
 # logging messages on file
 msgLogging = YES
 
+# how to format numbers
+OBDDATA_FORMAT_STRING = {0:.3f}
 

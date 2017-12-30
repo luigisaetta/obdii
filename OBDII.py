@@ -12,8 +12,14 @@
 import json
 import datetime
 import obd 
+import configparser
 
 
+# config
+config = configparser.ConfigParser()
+config.read('gateway.ini')
+
+OBDDATA_FORMAT_STRING = config['DEFAULT']['OBDDATA_FORMAT_STRING']
 STFORMAT1 = "%d-%m-%Y %H:%M:%S"
 
 class OBDII(object):
@@ -36,10 +42,16 @@ class OBDII(object):
         print('Connected to OBDII...\n')
 
     # method definition
+
+    # utility method to format float with a fixed number of decimals
+    def format_float(self, value):
+        return float(OBDDATA_FORMAT_STRING.format(value))
+    
+    # methods reading value from OBDII interface
     def getENGINELOAD(self):
         cmd = obd.commands.ENGINE_LOAD
 
-        return self.getValue(cmd)
+        return self.format_float(self.getValue(cmd))
     
     def getCOOLANTTEMP(self):
         cmd = obd.commands.COOLANT_TEMP
