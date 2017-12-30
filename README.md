@@ -28,13 +28,16 @@ Dependencies:
 - Paho MQTT client for Python (see: https://www.eclipse.org/paho/clients/python/)
 - configparser
 
-Release 1.0:
+Release 0.6:
 This release is to test the OBDII interface and demonstrate that the project is feasible.
 The first release of the code will read, in a loop, a set of values from OBDII interface, format it as a JSON msg
 and will send it to the MQTT broker to a dedicated topic.
 Communication will be secure and protected using TLS1.2.
 QoS for msgs will be: 1 (guaranteed at least once).
 In a separate project I will create a NodeRED flow to show the data from the car in a Dashboard.
+
+Release 1.0:
+Production ready code with all the features described for vers. 0.6
 
 Release 2.0:
 In release 2.0 I will integrate Oracle IoT Cloud Service and Oracle IoT Fleet Management.
@@ -44,6 +47,11 @@ I will integrate the Python code with Eclipse Kura.
 
 
 Release history:
-- 27/12/2017: vers. 0.5
+- 29/12/2017: vers. 0.6
+
 
 For more information about OBD-II, see https://en.wikipedia.org/wiki/OBD-II_PIDs
+
+Credits:
+- Access in Python code to OBDII data is realized using Python-OBD, see http://python-obd.readthedocs.io/en/latest/
+
