@@ -16,6 +16,7 @@ import sys
 import configparser
 from Device import Device
 from OBDII import OBDII
+from OBDIISimulator import OBDIISimulator
 
 # Configuration
 #  to format datetime
@@ -45,17 +46,9 @@ def createJSONMsg():
     msg = {}
     
     if runMode == "SIMUL":
-        msg = {}
-        msg['CARID'] = carID
-        msg['DTIME'] = datetime.datetime.now().strftime(STFORMAT1)
-        msg['ENGINE_LOAD'] = 22
-        msg['COOLANT_TEMP'] = 33.3
-        msg['RPM'] = 855
-        msg['SPEED'] = 55
-        msg['RUN_TIME'] = 300
-        msg['FUEL_LEVEL'] = 30
-        msg['AMBIANT_AIR_TEMP'] = 12
-        msg['OIL_TEMP'] = 155
+       # using the simulator
+       msg = obdii.getMessage()
+       msg['CARID'] = carID 
     else:
        # read data from OBDII
        msg = obdii.getMessage()
@@ -107,6 +100,8 @@ while gateway.isConnected() != True:
 #
 if runMode == "ACQUIRE":
     obdii = OBDII()
+else:
+    obdii = OBDIISimulator()
 
 #
 # main loop

@@ -89,8 +89,8 @@ class OBDII(object):
         msg['RPM'] = self.getRPM()
         msg['SPEED'] = self.getSPEED()
         msg['RUN_TIME'] = self.getRUNTIME()
-        msg['FUEL_LEVEL'] = self.getFUELLEVEL()
+        # msg['FUEL_LEVEL'] = self.getFUELLEVEL()
         msg['AMBIANT_AIR_TEMP'] = self.getAMBIANTAIRTEMP()
-        msg['OIL_TEMP'] = self.getOILTEMP()
+        # msg['OIL_TEMP'] = self.getOILTEMP()
 
         return msg
