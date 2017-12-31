@@ -62,6 +62,16 @@ class OBDIISimulator(object):
         tElapsed = (time.time() - self.tStart)
         
         return self.format_float((MINSPEED + MAXSPEED * math.sin((2 * math.pi *tElapsed)/PERIOD)))
+    
+    def getCOOLANTTEMP(self):
+        # simulate oscillation of RPM
+        PERIOD = 120
+        MINTEMP = 10
+        TEMP_RATE = 10
+
+        tElapsed = (time.time() - self.tStart)
+        
+        return self.format_float(MINTEMP + TEMP_RATE * tElapsed/PERIOD)
 
     # utility method to format float with a fixed number of decimals
     def format_float(self, value):
@@ -73,7 +83,7 @@ class OBDIISimulator(object):
         msg['DTIME'] = datetime.datetime.now().strftime(STFORMAT1)
         
         msg['ENGINE_LOAD'] = self.getENGINELOAD()
-        msg['COOLANT_TEMP'] = 66
+        msg['COOLANT_TEMP'] = self.getCOOLANTTEMP()
         msg['RPM'] = self.getRPM()
         msg['SPEED'] = self.getSPEED()
         msg['RUN_TIME'] = 100
