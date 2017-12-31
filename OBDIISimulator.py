@@ -12,6 +12,8 @@
 import json
 import datetime
 import configparser
+import math
+import time
 
 config = configparser.ConfigParser()
 config.read('gateway.ini')
@@ -25,6 +27,9 @@ class OBDIISimulator(object):
 
     # Constructor
     def __init__(self):
+        # register start time
+        self.tStart = time.time()
+
         self.connOK = False
     
         self.connOK = True
@@ -38,6 +43,26 @@ class OBDIISimulator(object):
 
         return eng_load
     
+    def getRPM(self):
+        # simulate oscillation of RPM
+        PERIOD = 120
+        MINRPM = 800
+        MAXRPM = 800
+
+        tElapsed = (time.time() - self.tStart)
+        
+        return self.format_float((MINRPM + MAXRPM * math.sin((2 * math.pi *tElapsed)/PERIOD)))
+    
+    def getSPEED(self):
+        # simulate oscillation of RPM
+        PERIOD = 120
+        MINSPEED = 10
+        MAXSPEED = 10
+
+        tElapsed = (time.time() - self.tStart)
+        
+        return self.format_float((MINSPEED + MAXSPEED * math.sin((2 * math.pi *tElapsed)/PERIOD)))
+
     # utility method to format float with a fixed number of decimals
     def format_float(self, value):
         return float(OBDDATA_FORMAT_STRING.format(value))
@@ -49,8 +74,8 @@ class OBDIISimulator(object):
         
         msg['ENGINE_LOAD'] = self.getENGINELOAD()
         msg['COOLANT_TEMP'] = 66
-        msg['RPM'] = 1000
-        msg['SPEED'] = 25
+        msg['RPM'] = self.getRPM()
+        msg['SPEED'] = self.getSPEED()
         msg['RUN_TIME'] = 100
         # msg['FUEL_LEVEL'] = 30
         msg['AMBIANT_AIR_TEMP'] = 12
