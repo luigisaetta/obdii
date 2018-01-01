@@ -85,7 +85,9 @@ print("RUN MODE: ", runMode)
 
 # MQTT connectivity is encapsulated in the Device class
 # see Device.py
-gateway = Device()
+clientID = carID
+
+gateway = Device(clientID)
 
 
 # try connecting in loop

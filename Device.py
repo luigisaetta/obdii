@@ -14,6 +14,7 @@
 """
 # pylint: disable=invalid-name
 
+import json
 import time
 import configparser
 import os
@@ -32,7 +33,6 @@ config.read(OBD2HOME + '/gateway.ini')
 HOST = config['DEFAULT']['host']
 PORT = int(config['DEFAULT']['port'])
 TIMEOUT = int(config['DEFAULT']['timeout'])
-CLIENT = config['DEFAULT']['client']
 MYQOS = int(config['DEFAULT']['myQos'])
 mqttLogging = config['DEFAULT']['mqttLogging']
 # config to enable TLS
@@ -43,11 +43,11 @@ class Device(object):
     """ This class encapsulate Device communication with MQTT broker """
 
     # Constructor
-    def __init__(self):
+    def __init__(self, clientID):
         self.connOK = False
 
         # Create MQTT client and set MQTT client ID
-        self.mqttClient = mqtt.Client(CLIENT, protocol=mqtt.MQTTv311)
+        self.mqttClient = mqtt.Client(clientID, protocol = mqtt.MQTTv311)
         # note that the client id must be unique on the broker
 
         # MQTT callbacks registration
@@ -79,7 +79,18 @@ class Device(object):
         return self.connOK
 
     def on_message(self, mqttc, obj, msg):
-        print(msg.topic + " " + str(msg.payload))
+        print('Received command: ')
+
+        try:
+            msgJson = json.loads(msg.payload)
+        
+            print('CARID: ', msgJson['CARID'])
+            print('DTIME: ', msgJson['DTIME'])
+            print('COMMAND: ', msgJson['COMM_TYPE'])
+            print('PARAMS: ', msgJson['PARAMS'])
+        except:
+            print('Error in parsing command: ')
+            print(msg.payload)
 
     def on_publish(self, mqttc, obj, mid):
         # print("mid: " + str(mid))
@@ -116,5 +127,6 @@ class Device(object):
         (result, mid) = self.mqttClient.publish(topic, msg, qos=MYQOS)
 
     def subscribe(self, topic):
-        # for now not implemented
-        pass
+        self.mqttClient.subscribe(topic, qos = 1)
+
+
