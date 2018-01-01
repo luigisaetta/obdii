@@ -1,0 +1,11 @@
+[Unit]
+Description=My OBD2 Service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/home/pi/obd2tests/runSimul.sh > /home/pi/obd2tests/runSimul.log 2>&1
+
+[Install]
+WantedBy=multi-user.target
+
