@@ -38,7 +38,10 @@ QoS for msgs will be: 1 (guaranteed at least once).
 In a separate project I will create a NodeRED flow to show the data from the car in a Dashboard.
 
 Release 0.7:
-OBD2 becomes a system service on RPI, therefore is automatically stared on RPI startup!
+OBD2 becomes a system service on RPI, therefore is automatically started on RPI startup!
+
+Relese 0.8 (wip):
+Added command processor. It is possible to send commands to RPI as msgs on a topic dedicated to the car
 
 Release 1.0:
 Production ready code with all the features described for vers. 0.6

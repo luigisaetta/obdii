@@ -50,6 +50,7 @@ sleepTime = 2
 
 # MQTT connectivity is encapsulated in the Device class
 # see Device.py
+# assign a different clientID (+SUB)
 clientID = carID + "SUB"
 
 gateway = Device(clientID)
