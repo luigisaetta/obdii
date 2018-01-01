@@ -14,10 +14,15 @@ import datetime
 import configparser
 import math
 import time
+import os
+
+# read OBD2_HOME env variable
+OBD2HOME = os.getenv('OBD2_HOME')
 
 config = configparser.ConfigParser()
-config.read('gateway.ini')
+config.read(OBD2HOME + '/gateway.ini')
 
+# format for float values (number of decimals)
 OBDDATA_FORMAT_STRING = config['DEFAULT']['OBDDATA_FORMAT_STRING']
 
 STFORMAT1 = "%d-%m-%Y %H:%M:%S"
@@ -37,7 +42,7 @@ class OBDIISimulator(object):
         print('Connected to OBDII...\n')
 
     def getENGINELOAD(self):
-        # test reducing to 3 decimals
+        # test reducing to 2 decimals
         eng_load = 33.3333395
         eng_load = self.format_float(eng_load)
 

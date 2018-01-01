@@ -16,6 +16,7 @@
 
 import time
 import configparser
+import os
 import paho.mqtt.client as mqtt
 
 
@@ -23,9 +24,10 @@ import paho.mqtt.client as mqtt
 # Configuration for MQTT protocol
 # is written in gateway.ini file !
 # host is the broker, in my Ravello env
-
+# read OBD2_HOME env variable
+OBD2HOME = os.getenv('OBD2_HOME')
 config = configparser.ConfigParser()
-config.read('gateway.ini')
+config.read(OBD2HOME + '/gateway.ini')
 
 HOST = config['DEFAULT']['host']
 PORT = int(config['DEFAULT']['port'])

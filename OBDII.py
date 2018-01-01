@@ -11,13 +11,17 @@
 
 import json
 import datetime
-import obd 
+import obd
 import configparser
+import os
 
 
 # config
+# read OBD2_HOME env variable
+OBD2HOME = os.getenv('OBD2_HOME')
+
 config = configparser.ConfigParser()
-config.read('gateway.ini')
+config.read(OBD2HOME + '/gateway.ini')
 
 OBDDATA_FORMAT_STRING = config['DEFAULT']['OBDDATA_FORMAT_STRING']
 STFORMAT1 = "%d-%m-%Y %H:%M:%S"

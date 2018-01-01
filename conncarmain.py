@@ -14,6 +14,7 @@ import time
 import datetime
 import sys
 import configparser
+import os
 from Device import Device
 from OBDII import OBDII
 from OBDIISimulator import OBDIISimulator
@@ -23,9 +24,6 @@ from OBDIISimulator import OBDIISimulator
 STFORMAT1 = "%d-%m-%Y %H:%M:%S"
 STFORMAT2 = "%d-%m-%Y"
 
-# file name for local logging
-FNAME = "msgs" + datetime.datetime.now().strftime(STFORMAT2) + ".log"
-
 # send a msg every 5 sec.
 sleepTime = 5
 #the name of MQTT topic where msgs are sent
@@ -33,10 +31,16 @@ TOPIC_NAME = 'cardata'
 
 
 # read configuration from gateway.ini file
+# read OBD2_HOME env variable
+OBD2HOME = os.getenv('OBD2_HOME')
+
 config = configparser.ConfigParser()
-config.read('gateway.ini')
+config.read(OBD2HOME + '/gateway.ini')
 msgLogging = config['DEFAULT']['msgLogging']
 carID = config['DEFAULT']['carID']
+
+# file name for local logging
+FNAME = OBD2HOME + "/msgs" + datetime.datetime.now().strftime(STFORMAT2) + ".log"
 
 #
 # createJSONMsg()
