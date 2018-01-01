@@ -77,7 +77,8 @@ class Device(object):
 
     def isConnected(self):
         return self.connOK
-
+    
+    # this function can be redefined... see set_on_message
     def on_message(self, mqttc, obj, msg):
         print('Received command: ')
 
@@ -128,5 +129,12 @@ class Device(object):
 
     def subscribe(self, topic):
         self.mqttClient.subscribe(topic, qos = 1)
+    
+    #
+    # this function enables to redefine the function to be called when a msgs is received
+    #
+    def set_on_message(self, func_to_call_back):
+        # redefines the func to call when a message arrives
+        self.mqttClient.on_message = func_to_call_back
 
 

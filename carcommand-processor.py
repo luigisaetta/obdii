@@ -39,14 +39,77 @@ carID = config['DEFAULT']['carID']
 
 TOPIC_COMMAND = 'carcommands/' + carID
 
-print('Reading commands from topic: ', TOPIC_COMMAND)
-
 # time between connections attempt
 sleepTime = 2
+
+def receive_msgs(mqttc, obj, msg):
+    print('\n')
+    print('Received command to process: ')
+    
+    # first need to check carID TODO
+    msgJson = json.loads(msg.payload)
+
+    try:
+        if msgJson['CARID'] == carID:
+            process_msgs(msg)
+        else:
+            # ignore msg
+            pass
+    except:
+        print('\n')
+        print('Error in parsing command: ')
+        print('Error info: ', sys.exc_info()[0], sys.exc_info()[1])
+        print('Command received: ', msg.payload)
+
+def process_msgs(msg):
+
+    # here we define the only commands supported
+    # insert here other commands...
+    options = {"PRINT" : doPrint,
+                "BEEP" : doBeep,
+                "OTHERS" : doOthers
+                }
+
+    try:
+        msgJson = json.loads(msg.payload)
+        
+        print('CARID: ', msgJson['CARID'])
+        print('DTIME: ', msgJson['DTIME'])
+        print('SENDER: ', msgJson['SENDER'])
+        print('COMMAND: ', msgJson['COMM_TYPE'])
+        print('PARAMS: ', msgJson['PARAMS'])
+
+        # here we call the function handling the single command
+        # it serches the name of the func in the dictionary options !!!
+        options[msgJson['COMM_TYPE']](msgJson['COMM_TYPE'], msgJson['PARAMS'])
+    except:
+        print('\n')
+        print('Error in parsing command: ')
+        print('Error info: ', sys.exc_info()[0], sys.exc_info()[1])
+        print('Command received: ', msg.payload)
+
+#
+# These are the functions dedicated to single commands
+# TODO: put the code to implement commands
+#  
+def doPrint(commType, parms):
+    print('Executing Print command ...')
+
+def doBeep(commType, parms):
+    print('Executing Beep command ...')
+
+def doOthers(commType, parms):
+    print('Executing Others command ...')
 
 #
 # **** Main **** 
 #
+
+print('\n')
+print('Command Processor Started...')
+print('\n')
+
+print('Reading commands from topic: ', TOPIC_COMMAND)
 
 # MQTT connectivity is encapsulated in the Device class
 # see Device.py
@@ -71,6 +134,9 @@ gateway.wait_for_conn_ok()
 
 # Subscribes to the topic dedicated to the Car
 gateway.subscribe(TOPIC_COMMAND)
+
+# redefine here the fcallback to call when msg received
+gateway.set_on_message(receive_msgs)
 
 while True:
     # waiting for commands
