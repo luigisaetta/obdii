@@ -3,7 +3,7 @@
 ## Author: L. Saetta
 
 ## Starting Date:   27/12/2017
-## Last update:     29/12/2017
+## Last update:     01/01/2018
 ##                  luigi.saetta@gmail.com
 
 This repository contains most of the work I have done to develop, in Python,
@@ -27,6 +27,7 @@ Cloud Services:
 Dependencies:
 - Paho MQTT client for Python (see: https://www.eclipse.org/paho/clients/python/)
 - configparser
+- Python-OBD (see credits)
 
 Release 0.6:
 This release is to test the OBDII interface and demonstrate that the project is feasible.
