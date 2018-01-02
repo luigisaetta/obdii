@@ -3,31 +3,34 @@
 ## Author: L. Saetta
 
 ## Starting Date:   27/12/2017
-## Last update:     01/01/2018
+## Last update:     02/01/2018
 ##                  luigi.saetta@gmail.com
 
-This repository contains most of the work I have done to develop, in Python,
-a working prototype for my idea of a Connected Car.
+This repository contains most of the work I have done to develop, a working prototype for my idea 
+of a Connected Car.
 
 Following, some details:
 
 HW that will be used:
 
 - OBDII port in the car
-- OBDII bluetooth adapter (available from Amazon, for example)
+- OBDII Bluetooth adapter (available from Amazon, for example)
 - a Raspberry PI 3 (need bluetooth and WIFI)
 - A SmartPhone, for Internet Connectivity (in my case an iPhone)
 - a PowerBank, to power the RPI
 
 Cloud Services:
-
+- Compute and Storage Services (a Linux VM)
 - MQTT broker (TLS capable)
 - NodeRED, to process msgs
+(MQTT and NodeRED are incapsulated in Docker Container)
 
-Dependencies:
+The software running on RPI is developed in Python and run as a set of System Services 
+
+SW Dependencies:
 - Paho MQTT client for Python (see: https://www.eclipse.org/paho/clients/python/)
 - configparser
-- Python-OBD (see credits)
+- Python-OBD to access dat afrom OBDII interface (see credits)
 
 Release 0.6:
 This release is to test the OBDII interface and demonstrate that the project is feasible.
@@ -41,7 +44,7 @@ Release 0.7:
 OBD2 becomes a system service on RPI, therefore is automatically started on RPI startup!
 
 Relese 0.8 (wip):
-Added command processor. It is possible to send commands to RPI as msgs on a topic dedicated to the car
+Added Command Processor. It is possible now to send commands to RPI as msgs on a topic dedicated to the car
 
 Release 1.0:
 Production ready code with all the features described for vers. 0.6
