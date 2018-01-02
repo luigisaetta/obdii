@@ -7,7 +7,7 @@
 ##                  luigi.saetta@gmail.com
 
 This repository contains most of the work I have done to develop a working prototype for my idea 
-of a Connected Car.
+of a **Connected Car**.
 
 Following, some details:
 
@@ -32,7 +32,7 @@ SW Dependencies:
 - configparser
 - Python-OBD to access dat afrom OBDII interface (see credits)
 
-Release 0.6:
+**Release 0.6**:
 This release is to test the OBDII interface and demonstrate that the project is feasible.
 The first release of the code will read, in a loop, a set of values from OBDII interface, format it as a JSON msg
 and will send it to the MQTT broker to a dedicated topic.
@@ -40,13 +40,13 @@ Communication will be secure and protected using TLS1.2.
 QoS for msgs will be: 1 (guaranteed at least once).
 In a separate project I will create a NodeRED flow to show the data from the car in a Dashboard.
 
-Release 0.7:
+**Release 0.7**:
 OBD2 becomes a system service on RPI, therefore is automatically started on RPI startup!
 
-Relese 0.8 (wip):
+**Relese 0.8** (wip):
 Added Command Processor. It is possible now to send commands to RPI as msgs on a topic dedicated to the car
 
-Release 1.0:
+**Release 1.0** (not yet available, sorry):
 Production ready code with all the features described for vers. 0.6
 
 Release 2.0:
