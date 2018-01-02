@@ -2,19 +2,20 @@
 #
 # Author:       L. Saetta
 # created:      27 december 2017
-# last update:  29/12/2017
+# last update:  02/01/2018
 #
 # published under MIT license (see LICENSE file)
 """
 
 # pylint: disable=invalid-name
 
-import json
-import time
-import datetime
-import sys
 import configparser
+import datetime
+import json
 import os
+import sys
+import time
+
 from Device import Device
 from OBDII import OBDII
 from OBDIISimulator import OBDIISimulator
@@ -49,14 +50,9 @@ FNAME = OBD2HOME + "/msgs" + datetime.datetime.now().strftime(STFORMAT2) + ".log
 def createJSONMsg():
     msg = {}
     
-    if runMode == "SIMUL":
-       # using the simulator
-       msg = obdii.getMessage()
-       msg['CARID'] = carID 
-    else:
-       # read data from OBDII
-       msg = obdii.getMessage()
-       msg['CARID'] = carID
+    # in the main code it is defined if Simulator or not !
+    msg = obdii.getMessage()
+    msg['CARID'] = carID 
     
     # format in JSON
     msgJson = json.dumps(msg)
@@ -79,14 +75,17 @@ if parLenght >= 2:
 else:
     runMode = "ACQUIRE"
 
-print("\n")
-print("Program started...")
-print("RUN MODE: ", runMode)
+print("")
+print("***")
+print("*** OBD2 Data Acquisition Program started ***")
+print("***")
+print("*** RUN MODE: ", runMode)
 
 # MQTT connectivity is encapsulated in the Device class
 # see Device.py
 clientID = carID
-
+# clientID is passed to make possible different clientID
+# MQTT doesn't allow different clients with same ID (second is disconnected)
 gateway = Device(clientID)
 
 
@@ -96,17 +95,19 @@ while gateway.isConnected() != True:
     try:
         gateway.connect()
     except:
-        print('Error in MQTT connection !')
+        print('*** Error in MQTT connection !')
 
     time.sleep(sleepTime)
 
 
 #
 # connectivity to OBDII interface
+# here it decides if running a simulator or real client
 #
 if runMode == "ACQUIRE":
     obdii = OBDII()
 else:
+    # SIMUL
     obdii = OBDIISimulator()
 
 #
@@ -120,13 +121,11 @@ if msgLogging == "YES":
 # (at this point should be connected)
 gateway.wait_for_conn_ok()
 
-print('Mqtt connection OK !\n')
-
 nMsgs = 0
 
 while True:
     nMsgs = nMsgs + 1
-    print('Sending msg number: ', nMsgs)
+    print('*** Sending msg n. ', nMsgs)
 
     # create the msg to send from data
     msgJson = createJSONMsg()

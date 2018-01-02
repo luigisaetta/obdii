@@ -7,9 +7,8 @@ TLS = YES
 CAFILEPATH = /path-to/ca.crt
 
 timeout = 60
-client = cs1
 myQos = 1
-carID = 0001
+carID = bmwx1
 
 # mqttLogging YES|NO
 mqttLogging = YES
@@ -19,3 +18,5 @@ msgLogging = YES
 # how to format numbers
 OBDDATA_FORMAT_STRING = {0:.3f}
 
+# log commands received
+COMMAND_LOG = commands.log

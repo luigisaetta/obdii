@@ -2,7 +2,7 @@
 #
 # Author:       L. Saetta
 # created:      10 december 2017
-# last update:  29/12/2017
+# last update:  02/01/2018
 #
 # published under MIT license (see LICENSE file)
 #
@@ -14,12 +14,12 @@
 """
 # pylint: disable=invalid-name
 
-import json
-import time
 import configparser
+import json
 import os
-import paho.mqtt.client as mqtt
+import time
 
+import paho.mqtt.client as mqtt
 
 #
 # Configuration for MQTT protocol
@@ -68,12 +68,14 @@ class Device(object):
             self.connOK = True
 
         print("")
-        print("MQTT Connection:...: ", self.connOK)
-        print("")
-
+        if self.connOK == True:
+            print("*** MQTT Connection  OK")
+        else:
+            print("*** MQTT Connection NON OK")
+        
     def on_disconnect(self, client, userdata, rc):
         self.connOK = False
-        print("MQTT disconnected...")
+        print("*** MQTT disconnected...")
 
     def isConnected(self):
         return self.connOK
@@ -131,10 +133,9 @@ class Device(object):
         self.mqttClient.subscribe(topic, qos = 1)
     
     #
-    # this function enables to redefine the function to be called when a msgs is received
+    # this function must be called to redefine the callback called when a msgs is received
+    # to be called from the main (for example the Command Processor)
     #
     def set_on_message(self, func_to_call_back):
         # redefines the func to call when a message arrives
         self.mqttClient.on_message = func_to_call_back
-
-

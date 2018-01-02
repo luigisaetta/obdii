@@ -43,7 +43,7 @@ class OBDII(object):
         #
         self.connOK = True
 
-        print('Connected to OBDII...\n')
+        print('*** OBDII Connection OK\n')
 
     # method definition
 
@@ -53,44 +53,30 @@ class OBDII(object):
     
     # methods reading value from OBDII interface
     def getENGINELOAD(self):
-        cmd = obd.commands.ENGINE_LOAD
+        return self.format_float(self.getValue(obd.commands.ENGINE_LOAD))
 
-        return self.format_float(self.getValue(cmd))
     
     def getCOOLANTTEMP(self):
-        cmd = obd.commands.COOLANT_TEMP
-
-        return self.getValue(cmd)
+        return self.getValue(obd.commands.COOLANT_TEMP)
 
     def getRPM(self):
-        cmd = obd.commands.RPM
-
-        return self.getValue(cmd)
+        return self.getValue(obd.commands.RPM)
 
     def getSPEED(self):
-        cmd = obd.commands.SPEED
-
-        return self.getValue(cmd)
+        return self.getValue(obd.commands.SPEED)
     
     def getRUNTIME(self):
-        cmd = obd.commands.RUN_TIME
-
-        return self.getValue(cmd)
+        return self.getValue(obd.commands.RUN_TIME)
     
     def getFUELLEVEL(self):
-        cmd = obd.commands.FUEL_LEVEL
-
-        return self.getValue(cmd)
+        return self.getValue(bd.commands.FUEL_LEVEL)
 
     def getAMBIANTAIRTEMP(self):
-        cmd = obd.commands.AMBIANT_AIR_TEMP
-
-        return self.getValue(cmd)
+        return self.getValue(obd.commands.AMBIANT_AIR_TEMP)
     
     def getOILTEMP(self):
-        cmd = obd.commands.OIL_TEMP
 
-        return self.getValue(cmd)
+        return self.getValue(obd.commands.OIL_TEMP)
 
     def getValue(self, cmd):
         response = self.obdconn.query(cmd)

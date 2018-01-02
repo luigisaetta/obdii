@@ -9,12 +9,12 @@
 
 # pylint: disable=invalid-name
 
-import json
-import datetime
 import configparser
+import datetime
+import json
 import math
-import time
 import os
+import time
 
 # read OBD2_HOME env variable
 OBD2HOME = os.getenv('OBD2_HOME')
@@ -24,8 +24,8 @@ config.read(OBD2HOME + '/gateway.ini')
 
 # format for float values (number of decimals)
 OBDDATA_FORMAT_STRING = config['DEFAULT']['OBDDATA_FORMAT_STRING']
-
 STFORMAT1 = "%d-%m-%Y %H:%M:%S"
+
 
 class OBDIISimulator(object):
     """ This class simulate data from OBDII """
@@ -36,10 +36,10 @@ class OBDIISimulator(object):
         self.tStart = time.time()
 
         self.connOK = False
-    
+
         self.connOK = True
 
-        print('Connected to OBDII...\n')
+        print('*** OBDII Connection OK\n')
 
     def getENGINELOAD(self):
         # test reducing to 2 decimals
@@ -47,27 +47,27 @@ class OBDIISimulator(object):
         eng_load = self.format_float(eng_load)
 
         return eng_load
-    
+
     def getRPM(self):
         # simulate oscillation of RPM
         PERIOD = 120
-        MINRPM = 800
-        MAXRPM = 800
+        MINRPM = 1000
+        MAXRPM = 1000
 
         tElapsed = (time.time() - self.tStart)
-        
-        return self.format_float((MINRPM + MAXRPM * math.sin((2 * math.pi *tElapsed)/PERIOD)))
-    
+
+        return self.format_float((MINRPM + MAXRPM * math.sin((2 * math.pi * tElapsed) / PERIOD)))
+
     def getSPEED(self):
         # simulate oscillation of RPM
         PERIOD = 120
-        MINSPEED = 10
-        MAXSPEED = 10
+        MINSPEED = 60
+        MAXSPEED = 60
 
         tElapsed = (time.time() - self.tStart)
-        
-        return self.format_float((MINSPEED + MAXSPEED * math.sin((2 * math.pi *tElapsed)/PERIOD)))
-    
+
+        return self.format_float((MINSPEED + MAXSPEED * math.sin((2 * math.pi * tElapsed) / PERIOD)))
+
     def getCOOLANTTEMP(self):
         # simulate oscillation of RPM
         PERIOD = 120
@@ -75,8 +75,8 @@ class OBDIISimulator(object):
         TEMP_RATE = 10
 
         tElapsed = (time.time() - self.tStart)
-        
-        return self.format_float(MINTEMP + TEMP_RATE * tElapsed/PERIOD)
+
+        return self.format_float(MINTEMP + TEMP_RATE * tElapsed / PERIOD)
 
     # utility method to format float with a fixed number of decimals
     def format_float(self, value):
@@ -86,7 +86,7 @@ class OBDIISimulator(object):
     def getMessage(self):
         msg = {}
         msg['DTIME'] = datetime.datetime.now().strftime(STFORMAT1)
-        
+
         msg['ENGINE_LOAD'] = self.getENGINELOAD()
         msg['COOLANT_TEMP'] = self.getCOOLANTTEMP()
         msg['RPM'] = self.getRPM()
