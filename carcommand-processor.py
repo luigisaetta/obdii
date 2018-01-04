@@ -55,7 +55,7 @@ def receive_msgs(mqttc, obj, msg):
 
     try:
         # first need to check carID
-        msgJson = json.loads(msg.payload)
+        msgJson = json.loads(msg.payload.decode("utf-8"))
 
         if msgJson['CARID'] == carID:
             # OK to process msg
@@ -74,12 +74,12 @@ def process_msgs(msg):
     # here we define the only commands supported
     # insert here other commands...
     options = {"PRINT": doPrint,
-               "BEEP": doBeep,
+               "BLINK": doBlink,
                "OTHERS": doOthers
                }
 
     try:
-        msgJson = json.loads(msg.payload)
+        msgJson = json.loads(msg.payload.decode("utf-8"))
 
         print('CARID: ', msgJson['CARID'])
         print('DTIME: ', msgJson['DTIME'])
@@ -108,8 +108,8 @@ def doPrint(commType, parms):
     print('*** Executing Print command ...')
 
 
-def doBeep(commType, parms):
-    print('*** Executing Beep command ...')
+def doBlink(commType, parms):
+    print('*** Executing Blink command ...')
 
 
 def doOthers(commType, parms):

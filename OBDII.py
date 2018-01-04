@@ -36,7 +36,7 @@ class OBDII(object):
         # create the connection
         self.obdconn = obd.OBD()
 
-        print('OBD connection status: ', self.obdconn.status())
+        print('*** OBD connection status: ', self.obdconn.status())
 
         # TODO: here I can add a check to see if it is connected
         # and eventually retry the connection...
