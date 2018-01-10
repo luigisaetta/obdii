@@ -44,10 +44,10 @@ In a separate project I will create a NodeRED flow to show the data from the car
 **Release 0.7**:
 OBD2 becomes a system service on RPI, therefore is automatically started on RPI startup!
 
-**Release 0.8:
+**Release 0.8**:
 Added Command Processor. It is possible now to send commands to RPI as msgs on a topic dedicated to the car
 
-**Release 0.9 (wip): 
+**Release 0.9 (wip)**: 
 Integration with Google Voice Kit. This is the Next Big Thing!!!
 
 **Release 1.0** (not yet available, sorry):
