@@ -39,8 +39,9 @@ def find_trips():
 
        vet.append(obj)
     
-       res = {}
-       res['Trips'] = vet
+    # build the response object
+    res = {}
+    res['Trips'] = vet
 
     msg_json = json.dumps(res, sort_keys=True)
 
