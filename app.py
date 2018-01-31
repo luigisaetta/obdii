@@ -10,23 +10,29 @@ from flask import request
 
 # globals
 HOST = 'mysql'
+DATABASE = 'home1'
+# THRESHOLD for SPEED
 SOGLIA = 50
+FLOAT_FORMAT_STRING = "{0:.2f}"
 
 app = Flask(__name__)
 
 def format_float(value):
-    OBDDATA_FORMAT_STRING = "{0:.2f}"
-    return float(OBDDATA_FORMAT_STRING.format(value))
+    return float(FLOAT_FORMAT_STRING.format(value))
 
-# lista dei trips
+#
+# list of the trips
+#
 @app.route('/car-api/trips')
 def find_trips():
-    db_connection = sql.connect(host=HOST, database='home1', user=cfg.mysql['user'], password=cfg.mysql['password'])
+    db_connection = sql.connect(host=HOST, database=DATABASE, user=cfg.mysql['user'], password=cfg.mysql['password'])
     
     SQL_SELECT = 'SELECT id, dayhour, start_id, stop_id FROM trips ORDER BY id ASC'
-
+    
+    # load data in Dataframe
     dfTrips = pd.read_sql(SQL_SELECT, con=db_connection)
     
+    # vector for the list of trips
     vet = []
     
     for index, row in dfTrips.iterrows():
@@ -41,17 +47,19 @@ def find_trips():
     
     # build the response object
     res = {}
-    res['Trips'] = vet
+    res['TRIPS'] = vet
 
     msg_json = json.dumps(res, sort_keys=True)
 
     resp = Response(msg_json, status=200, mimetype='application/json')
     return resp
 
-# calcola i dati riassuntivi del trip
+#
+# calculate TRIP summry data (consumption, distance, speed_over_threshold)
+#
 @app.route('/car-api/trip')
 def calcola_trip():
-    db_connection = sql.connect(host=HOST, database='home1', user=cfg.mysql['user'], password=cfg.mysql['password'])
+    db_connection = sql.connect(host=HOST, database=DATABASE, user=cfg.mysql['user'], password=cfg.mysql['password'])
     
     # prepare query
     # DAYHOUR = "27-01-2018 08"
@@ -59,6 +67,7 @@ def calcola_trip():
     # CARID=googx1
     CARID = request.args['CARID']
 
+    # identify TRIP from DAYHOUR and CARID
     SQL_SELECT = 'SELECT id, start_id, stop_id FROM trips WHERE dayhour = "' + DAYHOUR + '"'
 
     dfTrips = pd.read_sql(SQL_SELECT, con=db_connection)
@@ -67,6 +76,7 @@ def calcola_trip():
     START_ID = dfTrips['start_id'][0]
     STOP_ID = dfTrips['stop_id'][0]
     
+    # READ msgs from TRIP into DataFrame
     SQL_SELECT = 'SELECT msg FROM obd2_msg WHERE msg_type = "OBD2" and id > ' + str(START_ID) + ' and id < ' + \
              str(STOP_ID) + ' and carid = "' + CARID + '" order by id ASC'
 
@@ -77,7 +87,7 @@ def calcola_trip():
     maf = []
 
     for result in dfMesg['msg']:
-        # converte in JSON
+        # converts in JSON
         jresult = json.loads(result)
         speed.append(jresult['SPEED'])
         maf.append(jresult['MAF'])
@@ -99,12 +109,12 @@ def calcola_trip():
     tot_litri_gasolio = tot_gasolio/840
     tot_litri_gasolio = format_float(tot_litri_gasolio)
 
-    # distanza
+    # total distance calculated as end-start
     ini_dist = df['DISTANCE'].iloc[0]
     end_dist = df['DISTANCE'].iloc[-1]
     trip_len = (end_dist - ini_dist)
 
-    # calcola num_punti speed > SOGLIA
+    # calculate num_punti speed > SOGLIA
     over = df['SPEED'] > SOGLIA
     count_over = sum(over)    
     points = len(over)
@@ -114,6 +124,9 @@ def calcola_trip():
     v_result['ID'] = str(ID_TRIP) 
     v_result['GASOLINE'] = tot_litri_gasolio
     v_result['DISTANCE'] = trip_len
+
+    # SPEED_OVER_THRESHOLD can be considered as an indicator of how much
+    # the driver is taking risks
     v_result['SPEED_OVER_THRESHOLD'] = format_float(ratio)
 
     msg_json = json.dumps(v_result)
