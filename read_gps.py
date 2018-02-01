@@ -1,3 +1,14 @@
+"""
+#
+# Author:       L. Saetta
+# created:      27 jan 2018
+# last update:  01/02/2018
+#
+# published under MIT license (see LICENSE file)
+"""
+
+# pylint: disable=invalid-name
+
 import configparser
 import os
 import serial
@@ -8,7 +19,7 @@ from Device import Device
 #
 # globals
 #
-#the name of MQTT topic where msgs are sent
+# the name of MQTT topic where msgs are sent
 TOPIC_GPS = 'owntracks/luigi/googx1'
 sleepTime = 5
 GPS_FORMAT_STRING = "{0:.6f}"
@@ -26,7 +37,6 @@ def calcola_dec(x):
     SS = float(x) - DD * 100
     Dec = DD + SS/60
     return Dec
-
 
 #
 # createJSONMsg()
@@ -54,7 +64,6 @@ OBD2HOME = os.getenv('OBD2_HOME')
 
 config = configparser.ConfigParser()
 config.read(OBD2HOME + '/gateway.ini')
-msgLogging = config['DEFAULT']['msgLogging']
 carID = config['DEFAULT']['carID']
 
 # clientID is passed to make possible different clientID
@@ -97,14 +106,15 @@ while True:
                 alt = float(ALT)
                 acc = float(ACC)
 
-                print(lat, lon, alt)
+                print(lat, lon, alt, acc)
             
                 try:
                     # build JSON msg and send to topic on localhost
                     msgJson = createJSONMsg(carID, lat, lon, alt, acc)
-                    # 
+                    
+                    # msg are published on the local MQTT broker where are read from a NodeRED flow 
+                    # that publish them in REDIS DB 
                     gateway.publish(TOPIC_GPS, msgJson)
-                    pass
                 except:
                     print('Error in sending GPS MSG...')
     except:
