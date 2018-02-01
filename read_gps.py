@@ -106,7 +106,7 @@ while True:
                 alt = float(ALT)
                 acc = float(ACC)
 
-                print(lat, lon, alt, acc)
+                # print(lat, lon, alt, acc)
             
                 try:
                     # build JSON msg and send to topic on localhost
