@@ -240,6 +240,113 @@ def find_cars():
     resp = Response(msg_json, status=200, mimetype='application/json')
     return resp
 
+#
+# data of last trip (MAX_ID)
+#
+
+@app.route('/car-api/trips/last')
+def last_trip():
+    try:
+        db_connection = sql.connect(
+            host=HOST, database=DATABASE, user=cfg.mysql['user'], password=cfg.mysql['password'])
+
+        # identify TRIP from MAX(ID)
+        SQL_SELECT = 'SELECT MAX(id) as maxid FROM trips'
+
+        dfTrips1 = pd.read_sql(SQL_SELECT, con=db_connection)
+
+        MAX_ID = dfTrips1['maxid'][0]
+
+        # identify TRIP from MAX(ID)
+        SQL_SELECT = 'SELECT dayhour, start_id, stop_id FROM trips WHERE ID = ' + str(MAX_ID)
+
+        dfTrips = pd.read_sql(SQL_SELECT, con=db_connection)
+
+        ID_TRIP = MAX_ID
+        DAYHOUR = dfTrips['dayhour'][0]
+        START_ID = dfTrips['start_id'][0]
+        STOP_ID = dfTrips['stop_id'][0]
+
+        # READ msgs from TRIP into DataFrame
+        SQL_SELECT = 'SELECT msg FROM obd2_msg WHERE msg_type = "OBD2" and id > ' + str(START_ID) + ' and id < ' + \
+            str(STOP_ID) + ' order by id ASC'
+
+        dfMesg = pd.read_sql(SQL_SELECT, con=db_connection)
+
+        distance = []
+        speed = []
+        maf = []
+
+        for result in dfMesg['msg']:
+            # converts in JSON
+            jresult = json.loads(result)
+            speed.append(jresult['SPEED'])
+            maf.append(jresult['MAF'])
+            distance.append(jresult['DISTANCE'])
+
+        df = pd.DataFrame([speed, maf, distance]).T
+
+        # defines column name
+        df.columns = ['SPEED', 'MAF', 'DISTANCE']
+
+        # calcolo la somma dei valori MAF
+        tot_maf = df['MAF'].sum()
+        # intervallo tra i punti
+        delta_time = 7
+        # uso rapporto ideale (14.7)
+        tot_aria = delta_time * tot_maf
+        # gasolio in grammi
+        tot_gasolio = tot_aria / 14.7
+        tot_litri_gasolio = tot_gasolio / 840
+        tot_litri_gasolio = format_float(tot_litri_gasolio)
+
+        # total distance calculated as end-start
+        ini_dist = df['DISTANCE'].iloc[0]
+        end_dist = df['DISTANCE'].iloc[-1]
+        trip_len = (end_dist - ini_dist)
+
+        # calculate num_punti speed > SOGLIA
+        over = df['SPEED'] > SOGLIA
+        count_over = sum(over)
+        points = len(over)
+        ratio = (count_over / points) * 100
+
+        v_result = {}
+        v_result['ID'] = str(ID_TRIP)
+        v_result['DAYHOUR'] = DAYHOUR
+        v_result['GASOLINE'] = tot_litri_gasolio
+        v_result['DISTANCE'] = trip_len
+
+        # SPEED_OVER_THRESHOLD can be considered as an indicator of how much
+        # the driver is taking risks
+        v_result['SPEED_OVER_THRESHOLD'] = format_float(ratio)
+
+        msg_json = json.dumps(v_result)
+
+        resp = Response(msg_json, status=200, mimetype='application/json')
+
+        return resp
+
+    except:
+        errore = {}
+        errore['CODE'] = -1
+        errore['MESSAGE'] = 'Error in GET TRIPS'
+        print('*** Error info: ', sys.exc_info()[0], sys.exc_info()[1])
+
+        return errore
+
+
+@app.route('/car-api/test/11')
+def test():
+    res = {}
+    res['id'] = 11
+    res['content'] = "Hello, World!"
+
+    msg_json = json.dumps(res, sort_keys=True)
+
+    resp = Response(msg_json, status=200, mimetype='application/json')
+    return resp
+
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
