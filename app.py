@@ -240,9 +240,6 @@ def find_cars():
     resp = Response(msg_json, status=200, mimetype='application/json')
     return resp
 
-#
-# data of last trip (MAX_ID)
-#
 
 @app.route('/car-api/trips/last')
 def last_trip():
@@ -312,7 +309,7 @@ def last_trip():
         ratio = (count_over / points) * 100
 
         v_result = {}
-        v_result['ID'] = str(ID_TRIP)
+        v_result['ID'] = int(ID_TRIP)
         v_result['DAYHOUR'] = DAYHOUR
         v_result['GASOLINE'] = tot_litri_gasolio
         v_result['DISTANCE'] = trip_len
@@ -349,4 +346,4 @@ def test():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0', port=5555)
