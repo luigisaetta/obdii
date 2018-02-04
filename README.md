@@ -32,7 +32,7 @@ The software running on RPI is developed in Python and run as a set of System Se
 SW Dependencies:
 - Paho MQTT client for Python (see: https://www.eclipse.org/paho/clients/python/)
 - configparser
-- Python-OBD to access dat afrom OBDII interface (see credits)
+- Python-OBD to access data from OBDII interface (see credits)
 
 **Release 0.6**:
 This release is to test the OBDII interface and demonstrate that the project is feasible.
