@@ -18,6 +18,7 @@ HW that will be used:
 - a Raspberry PI 3 (need bluetooth and WIFI)
 - A SmartPhone, for Internet Connectivity (in my case an iPhone)
 - a PowerBank, to power the RPI
+- GlobalSat USB Ricevitore GPS BU-353-S4 (SiRF Star IV)
 - (optional) Google Voice AYI kit
  
 Cloud Services:
